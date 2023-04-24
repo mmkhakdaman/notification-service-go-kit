@@ -27,7 +27,7 @@ type Service interface {
 		icon string) error
 	SeenNotification(id uint64) error
 	SeenAllNotifications(id uint64) error
-	GetNotifications(userId uint64, limit uint32, offset uint32) (error, []models.Notification, uint32)
+	GetNotifications(userId uint64, limit, offset uint32) ([]*models.Notification, uint32, error)
 }
 
 // NewService returns a Service with all the expected dependencies
@@ -76,23 +76,23 @@ func (r *service) SeenNotification(id uint64) error {
 	return db.Model(notification).Update("seen", true).Error
 }
 
-func (r *service) GetNotifications(id uint64, limit uint32, offset uint32) (error, []models.Notification, uint32) {
+func (r *service) GetNotifications(id uint64, limit uint32, offset uint32) ([]*models.Notification, uint32, error) {
 	db := database.GetDB()
 
-	var notifications []models.Notification
+	var notifications []*models.Notification
 	var count int64
 
 	err := db.Model(&models.Notification{}).Where("user_id = ?", id).Count(&count).Error
 	if err != nil {
-		return err, nil, 0
+		return nil, 0, err
 	}
 
 	err = db.Model(&models.Notification{}).Where("user_id = ?", id).Order("created_at desc").Limit(int(limit)).Offset(int(offset)).Find(&notifications).Error
 	if err != nil {
-		return err, nil, 0
+		return nil, 0, err
 	}
 
-	return nil, notifications, uint32(count)
+	return notifications, uint32(count), nil
 }
 
 func (r *service) SeenAllNotifications(id uint64) error {

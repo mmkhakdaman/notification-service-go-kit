@@ -25,8 +25,8 @@ func (f *FactoryImpl) CreateNotification() *models.Notification {
 	return &models.Notification{
 		Title:            gofakeit.Name(),
 		Message:          gofakeit.Name(),
-		UserId:           gofakeit.Uint64(),
-		SenderId:         gofakeit.Uint64(),
+		UserId:           uint64(gofakeit.UintRange(1, 50)),
+		SenderId:         uint64(gofakeit.UintRange(1, 50)),
 		NotificationType: gofakeit.Name(),
 		Avatar:           gofakeit.Name(),
 		Link:             gofakeit.Name(),

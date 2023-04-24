@@ -1,3 +1,4 @@
 go.sum
 .idea
 tmp
+test/test.db
