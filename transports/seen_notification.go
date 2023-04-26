@@ -21,7 +21,7 @@ func encodeSeenNotificationResponse(_ context.Context, response interface{}) (in
 }
 
 func (g gRPCServer) SeenNotification(ctx context.Context, request *pb.SeenNotificationRequest) (*pb.SeenNotificationResponse, error) {
-	_, resp, err := g.sendNotification.ServeGRPC(ctx, request)
+	_, resp, err := g.seenNotification.ServeGRPC(ctx, request)
 	if err != nil {
 		return nil, err
 	}

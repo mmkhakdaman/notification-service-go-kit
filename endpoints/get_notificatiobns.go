@@ -15,14 +15,14 @@ type GetNotificationsRequest struct {
 
 type GetNotificationsResponse struct {
 	Success       bool
-	Notifications []models.Notification
+	Notifications []*models.Notification
 	Total         uint32
 }
 
 func makeGetNotificationsEndpoint(s services.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(GetNotificationsRequest)
-		err, notifications, total := s.GetNotifications(
+		notifications, total, err := s.GetNotifications(
 			req.UserId,
 			req.Limit,
 			req.Offset,

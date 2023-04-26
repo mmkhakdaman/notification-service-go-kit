@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
 type Notification struct {
 	gorm.Model
@@ -13,7 +16,8 @@ type Notification struct {
 	Link             string
 	LinkText         string
 	Icon             string
-	NotificationType string `gorm:"column:type"`
-	ObjectId         uint   `gorm:"column:object_id"`
-	ObjectType       string `gorm:"column:object_type"`
+	NotificationType string     `gorm:"column:type"`
+	ObjectId         uint       `gorm:"column:object_id"`
+	ObjectType       string     `gorm:"column:object_type"`
+	SeenAt           *time.Time `gorm:"column:seen_at"`
 }

@@ -73,7 +73,7 @@ func (r *service) SeenNotification(id uint64) error {
 		ID: id,
 	}
 
-	return db.Model(notification).Update("seen", true).Error
+	return db.Model(notification).Update("seen_at", gorm.Expr("NOW()")).Error
 }
 
 func (r *service) GetNotifications(id uint64, limit uint32, offset uint32) ([]*models.Notification, uint32, error) {

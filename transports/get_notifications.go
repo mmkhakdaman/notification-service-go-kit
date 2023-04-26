@@ -19,11 +19,30 @@ func encodeGetNotificationsResponse(_ context.Context, response interface{}) (in
 	resp := response.(endpoints.GetNotificationsResponse)
 	return &pb.GetNotificationsResponse{
 		Success: resp.Success,
+		Notifications: func() []*pb.Notification {
+			var notifications []*pb.Notification
+			for _, notification := range resp.Notifications {
+				notifications = append(notifications, &pb.Notification{
+					Id:        uint64(notification.ID),
+					Title:     notification.Title,
+					Message:   notification.Message,
+					Recipient: notification.UserId,
+					Sender:    notification.SenderId,
+					Type:      notification.NotificationType,
+					Avatar:    notification.Avatar,
+					Link:      notification.Link,
+					LinkText:  notification.LinkText,
+					Icon:      notification.Icon,
+				})
+			}
+			return notifications
+		}(),
+		Total: resp.Total,
 	}, nil
 }
 
 func (g gRPCServer) GetNotifications(ctx context.Context, request *pb.GetNotificationsRequest) (*pb.GetNotificationsResponse, error) {
-	_, resp, err := g.sendNotification.ServeGRPC(ctx, request)
+	_, resp, err := g.getNotifications.ServeGRPC(ctx, request)
 	if err != nil {
 		return nil, err
 	}
